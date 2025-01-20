@@ -59,7 +59,14 @@ export default function InstagramReels() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const reelsPerPage = 10;
-  const userId = localStorage.getItem("blogId");
+  const [blogId, setBlogId] = useState<string | null>(null);
+
+  useEffect(() => {
+    const blogid = localStorage.getItem("blogId");
+    setBlogId(blogid); // blogid is a string or null
+  }, []);
+
+
 
   const headers = {
     Accept: "application/json",
@@ -98,7 +105,7 @@ export default function InstagramReels() {
           params: {
             from,
             to,
-            blogId: userId,
+            blogId
           },
           headers,
         }

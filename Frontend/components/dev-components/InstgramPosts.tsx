@@ -24,7 +24,15 @@ export default function InstagramPosts() {
   const [error, setError] = useState<string | null>(null)
   const [selectedPost, setSelectedPost] = useState<InstagramPost | null>(null)
   const postsPerPage = 10
-  const businessId = localStorage.getItem("businessId")
+  const [businessId, setBusinessId] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const id = localStorage.getItem("businessId");
+      setBusinessId(id);
+    }
+  }, []);
+
 
   const headers = {
     Accept: "application/json",
