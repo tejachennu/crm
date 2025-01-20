@@ -225,7 +225,13 @@ export default function FacebookReels() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const reelsPerPage = 10;
-  const blogId = localStorage.getItem("blogId");
+  
+  const [blogId, setBlogId] = useState<string | null>(null);
+
+  useEffect(() => {
+    const blogid = localStorage.getItem("blogId");
+    setBlogId(blogid); // blogid is a string or null
+  }, []);
 
   const headers = {
     Accept: "application/json",
