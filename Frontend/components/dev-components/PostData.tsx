@@ -78,7 +78,7 @@ const PostData = ({ postId }: { postId: string }) => {
       setLoading(true);
       try {
         const response = await axios.get(
-          `http://localhost:3003/api/fbPDtTrk/${postId}`
+          `http://147.93.44.40:3003/api/fbPDtTrk/${postId}`
         );
         setData(response.data.data || []);
         setError("");

@@ -22,7 +22,6 @@ export default function LoginPage() {
   const router = useRouter();
   const [isPending, setIsPending] = useState(false);
 
-  console.log('Backend URL:', process.env.NEXT_PUBLIC_BACKENDURL);
 
 
   // Function to handle login submission
@@ -32,7 +31,7 @@ export default function LoginPage() {
 
     setIsPending(true);
     try {
-      const response = await axios.post(`${process.env.NEXT_BACKENDURL}/api/checkUser`, {
+      const response = await axios.post(`http://147.93.44.40:3003/api/checkUser`, {
         email: formData.get('email'),
         password: formData.get('password'),
       });

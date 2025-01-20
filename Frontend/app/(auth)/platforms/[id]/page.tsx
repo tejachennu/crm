@@ -47,7 +47,7 @@ export default function PlatformSelection() {
     alert(selectedPlatforms)
 
     try {
-      const response = await fetch(`http://localhost:3003/api/updateplatform/${id}`, {
+      const response = await fetch(`http://147.93.44.40:3003/api/updateplatform/${id}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
