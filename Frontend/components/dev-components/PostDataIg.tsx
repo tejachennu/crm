@@ -292,21 +292,26 @@ const InstagramPostData = ({ postId }: { postId: string }) => {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {paginatedData.map((entry, rowIndex) => (
-                <TableRow key={rowIndex}>
-                  {Object.values(entry).map((value, colIndex) => (
-                    <TableCell
-                      key={`${rowIndex}-${colIndex}`}
-                      className="text-gray-600"
-                    >
-                      {typeof value === "number"
-                        ? value.toLocaleString()
-                        : value || "N/A"}
-                    </TableCell>
-                  ))}
-                </TableRow>
-              ))}
-            </TableBody>
+  {paginatedData.map((entry, rowIndex) => (
+    <TableRow key={rowIndex}>
+      {Object.values(entry).map((value, colIndex) => (
+        <TableCell
+          key={`${rowIndex}-${colIndex}`}
+          className="text-gray-600"
+        >
+          {typeof value === "number"
+            ? value.toLocaleString()
+            : typeof value === "string"
+            ? value
+            : value === null || value === undefined
+            ? "N/A"
+            : JSON.stringify(value)} {/* Fallback for objects or arrays */}
+        </TableCell>
+      ))}
+    </TableRow>
+  ))}
+</TableBody>
+
           </Table>
         </div>
 

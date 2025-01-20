@@ -11,7 +11,13 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Loader2, ChevronLeft, ChevronRight, AlertCircle, Facebook } from "lucide-react";
+import {
+  Loader2,
+  ChevronLeft,
+  ChevronRight,
+  AlertCircle,
+  Facebook,
+} from "lucide-react";
 import {
   Card,
   CardContent,
@@ -98,6 +104,8 @@ const PostData = ({ postId }: { postId: string }) => {
     return date >= startDate;
   });
 
+  const value: string | number | null | undefined = null;
+
   const totalPages = Math.ceil(data.length / recordsPerPage);
   const paginatedData = data.slice(
     (currentPage - 1) * recordsPerPage,
@@ -114,18 +122,18 @@ const PostData = ({ postId }: { postId: string }) => {
 
   if (loading) {
     return (
-    <div className="w-full mx-auto my-auto h-[40vh]">
-      <Card className="w-full max-w-md mx-auto">
-        <CardContent className="flex flex-col items-center justify-center p-6 space-y-4">
-          <Facebook className="w-12 h-12 text-blue-500 animate-pulse" />
-          <CardTitle className="text-xl font-semibold text-gray-700">
-            Fetching Facebook Post Data
-          </CardTitle>
-          <Loader2 className="w-8 h-8 text-blue-500 animate-spin" />
-        </CardContent>
-      </Card>
-    </div>
-    )
+      <div className="w-full mx-auto my-auto h-[40vh]">
+        <Card className="w-full max-w-md mx-auto">
+          <CardContent className="flex flex-col items-center justify-center p-6 space-y-4">
+            <Facebook className="w-12 h-12 text-blue-500 animate-pulse" />
+            <CardTitle className="text-xl font-semibold text-gray-700">
+              Fetching Facebook Post Data
+            </CardTitle>
+            <Loader2 className="w-8 h-8 text-blue-500 animate-spin" />
+          </CardContent>
+        </Card>
+      </div>
+    );
   }
 
   if (error) {
@@ -135,20 +143,25 @@ const PostData = ({ postId }: { postId: string }) => {
         <AlertTitle>Error</AlertTitle>
         <AlertDescription>{error}</AlertDescription>
       </Alert>
-    )
+    );
   }
 
   if (!data.length) {
     return (
       <Card className="w-full max-w-md mx-auto">
         <CardHeader>
-          <CardTitle className="text-xl font-semibold text-gray-700">No Data Available</CardTitle>
+          <CardTitle className="text-xl font-semibold text-gray-700">
+            No Data Available
+          </CardTitle>
         </CardHeader>
         <CardContent>
-          <p className="text-gray-500">There is no data available for this post.Old post data is not available</p>
+          <p className="text-gray-500">
+            There is no data available for this post.Old post data is not
+            available
+          </p>
         </CardContent>
       </Card>
-    )
+    );
   }
 
   return (
@@ -292,21 +305,26 @@ const PostData = ({ postId }: { postId: string }) => {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {paginatedData.map((entry, rowIndex) => (
-                <TableRow key={rowIndex}>
-                  {Object.values(entry).map((value, colIndex) => (
-                    <TableCell
-                      key={`${rowIndex}-${colIndex}`}
-                      className="text-gray-600"
-                    >
-                      {typeof value === "number"
-                        ? value.toLocaleString()
-                        : value || "N/A"}
-                    </TableCell>
-                  ))}
-                </TableRow>
-              ))}
-            </TableBody>
+  {paginatedData.map((entry, rowIndex) => (
+    <TableRow key={rowIndex}>
+      {Object.values(entry).map((value, colIndex) => (
+        <TableCell
+          key={`${rowIndex}-${colIndex}`}
+          className="text-gray-600"
+        >
+          {typeof value === "number"
+            ? value.toLocaleString()
+            : typeof value === "string"
+            ? value
+            : value === null || value === undefined
+            ? "N/A"
+            : JSON.stringify(value)} {/* Fallback for objects or arrays */}
+        </TableCell>
+      ))}
+    </TableRow>
+  ))}
+</TableBody>
+
           </Table>
         </div>
 
