@@ -1,6 +1,3 @@
-
-
-
 "use client"
 
 import { useState, useEffect } from 'react'
@@ -32,8 +29,6 @@ export default function FacebookPosts() {
     const blogid = localStorage.getItem("blogId");
     setBlogId(blogid); // blogid is a string or null
   }, []);
-
-  
 
   const headers = {
     Accept: "application/json",
@@ -110,53 +105,6 @@ export default function FacebookPosts() {
       ) : error ? (
         <div className="text-center text-red-500">{error}</div>
       ) : (
-      //  <Table className="rounded-lg border bg-white border-gray-200">
-      //     <TableHeader className="bg-gray-300">
-      //       <TableRow className='border-b bg-gray-50'>
-      //         <TableHead className='px-4 py-3 text-left text-sm font-medium text-gray-500'>Post</TableHead>
-      //         <TableHead className=' px-4 py-3 text-left text-sm font-medium text-gray-500'>Date</TableHead>
-      //         <TableHead className="px-4 py-3 text-left text-sm font-medium text-gray-500">Impressions</TableHead>
-      //         <TableHead className="px-4 py-3 text-left text-sm font-medium text-gray-500">Engagement</TableHead>
-      //         <TableHead className="px-4 py-3 text-left text-sm font-medium text-gray-500">Reactions</TableHead>
-      //       </TableRow>
-      //     </TableHeader>
-      //     <TableBody>
-      //       {currentPosts.map((post) => (
-      //         <TableRow 
-      //           key={post.internalSearchId}
-      //           className="cursor-pointer hover:bg-gray-100"
-      //           onClick={() => setSelectedPost(post)}
-      //         >
-      //           <TableCell>
-      //             <div className="flex items-center gap-3">
-      //               <div className="relative w-16 h-16 overflow-hidden bg-gray-100 rounded-lg">
-      //                 {post.picture ? (
-      //                   <Image
-      //                     src={post.picture || "/placeholder.svg"}
-      //                     alt="Facebook post"
-      //                     fill
-      //                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-      //                     className="object-cover"
-      //                   />
-      //                 ) : (
-      //                   <div className="flex items-center justify-center w-full h-full">
-      //                     <ImageIcon className="w-6 h-6 text-gray-400" />
-      //                   </div>
-      //                 )}
-      //               </div>
-      //               <div className="max-w-[200px] truncate">
-      //                 {post.text}
-      //               </div>
-      //             </div>
-      //           </TableCell>
-      //           <TableCell>{new Date(post.created.dateTime).toLocaleString()}</TableCell>
-      //           <TableCell className="text-right">{post.impressions.toLocaleString()}</TableCell>
-      //           <TableCell className="text-right">{post.engagement.toFixed(2)}%</TableCell>
-      //           <TableCell className="text-right">{post.reactions.toLocaleString()}</TableCell>
-      //         </TableRow>
-      //       ))}
-      //     </TableBody>
-      //   </Table>
       <div className="overflow-x-auto">
       <Table className="w-full rounded-lg border bg-white border-gray-200">
         <TableHeader>
