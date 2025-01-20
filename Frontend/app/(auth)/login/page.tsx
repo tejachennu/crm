@@ -44,7 +44,7 @@ export default function LoginPage() {
         //   description: 'Login successful! Redirecting...',
         // });
 
-        router.push('/dashboard');
+        router.push('/facebook');
       } else {
 
         console.log({
