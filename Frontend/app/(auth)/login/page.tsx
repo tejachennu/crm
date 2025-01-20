@@ -29,7 +29,7 @@ export default function LoginPage() {
 
     setIsPending(true);
     try {
-      const response = await axios.post(`http://localhost:3003/api/checkUser`, {
+      const response = await axios.post(`http://147.93.44.40:3003/api/checkUser`, {
         email: formData.get('email'),
         password: formData.get('password'),
       });
