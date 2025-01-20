@@ -37,7 +37,7 @@ export default function SignUpPage() {
 
     setIsPending(true)
     try {
-      const result = await axios.post(`http://147.93.44.40:3003/api/user`, {
+      const result = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/user`, {
         userName: formData.get('name'),
         blogId: formData.get('blogid'),
         email: formData.get('email'),
