@@ -16,6 +16,7 @@ import {
 import { InstagramPost } from '@/types/fb'
 import { InstagramPostDetailsTable } from './instgram/InstagramPostDetailsTable'
 import { InstgramPostDetails } from './instgram/InstgramPostDetails'
+import { TableSkeleton } from './TableSkeleton'
 
 export default function InstagramPosts() {
   const [allPosts, setAllPosts] = useState<InstagramPost[]>([])
@@ -76,7 +77,6 @@ export default function InstagramPosts() {
       setAllPosts(response.data.data)
     } catch (err) {
       setError('An error occurred while fetching posts')
-      console.error(err)
     } finally {
       setIsLoading(false)
     }
@@ -93,7 +93,7 @@ export default function InstagramPosts() {
         <h1 className="text-2xl font-semibold">List of Instagram Posts</h1>
         <Button 
           variant="outline" 
-          className="text-white bg-pink-500" 
+          className="text-white bg-blue-500" 
           size="sm"
           onClick={fetchPosts}
         >
@@ -103,20 +103,19 @@ export default function InstagramPosts() {
       </div>
 
       {isLoading ? (
-        <div className="flex items-center justify-center h-64">
-          <RefreshCw className="w-8 h-8 text-pink-500 animate-spin" />
-        </div>
+                  <TableSkeleton/>
+        
       ) : error ? (
         <div className="text-center text-red-500">{error}</div>
       ) : (
-        <Table>
+        <Table className="w-full rounded-lg border bg-white border-gray-200">
           <TableHeader>
-            <TableRow>
-              <TableHead>Post</TableHead>
-              <TableHead>Date</TableHead>
-              <TableHead className="text-right">Impressions</TableHead>
-              <TableHead className="text-right">Engagement</TableHead>
-              <TableHead className="text-right">Likes</TableHead>
+          <TableRow className="bg-gray-100 border-b border-gray-200">
+              <TableHead className="px-6 py-4 text-left text-sm font-semibold text-gray-600" >Post</TableHead>
+              <TableHead className="px-6 py-4 text-left text-sm font-semibold text-gray-600">Date</TableHead>
+              <TableHead className="px-6 py-4 text-left text-sm font-semibold text-gray-600">Impressions</TableHead>
+              <TableHead className="px-6 py-4 text-left text-sm font-semibold text-gray-600">Engagement</TableHead>
+              <TableHead className="px-6 py-4 text-left text-sm font-semibold text-gray-600">Likes</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -149,9 +148,9 @@ export default function InstagramPosts() {
                   </div>
                 </TableCell>
                 <TableCell>{new Date(post.publishedAt.dateTime).toLocaleString()}</TableCell>
-                <TableCell className="text-right">{post.impressions.toLocaleString()}</TableCell>
-                <TableCell className="text-right">{post.engagement.toFixed(2)}%</TableCell>
-                <TableCell className="text-right">{post.likes.toLocaleString()}</TableCell>
+                <TableCell className="text-center">{post.impressions.toLocaleString()}</TableCell>
+                <TableCell className="text-center">{post.engagement.toFixed(2)}%</TableCell>
+                <TableCell className="text-center">{post.likes.toLocaleString()}</TableCell>
               </TableRow>
             ))}
           </TableBody>
@@ -165,7 +164,7 @@ export default function InstagramPosts() {
         <div className="flex gap-2">
           <Button
             variant="outline"
-            className="text-white bg-pink-500"
+            className="text-white bg-blue-500"
             size="sm"
             onClick={() => setCurrentPage(page => Math.max(1, page - 1))}
             disabled={currentPage === 1}
@@ -174,7 +173,7 @@ export default function InstagramPosts() {
           </Button>
           <Button
             variant="outline"
-            className="text-white bg-pink-500"
+            className="text-white bg-blue-500"
             size="sm"
             onClick={() => setCurrentPage(page => Math.min(totalPages, page + 1))}
             disabled={currentPage === totalPages}

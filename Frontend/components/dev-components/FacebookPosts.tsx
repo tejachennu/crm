@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/table"
 import { FacebookPost } from '@/types/fb'
 import { FacebookPostDetails } from './facebook/FacebookPostDetails'
+import { TableSkeleton } from './TableSkeleton'
 
 export default function FacebookPosts() {
   const [allPosts, setAllPosts] = useState<FacebookPost[]>([])
@@ -72,7 +73,6 @@ export default function FacebookPosts() {
       setAllPosts(response.data.data)
     } catch (err) {
       setError('An error occurred while fetching posts')
-      console.error(err)
     } finally {
       setIsLoading(false)
     }
@@ -99,78 +99,29 @@ export default function FacebookPosts() {
       </div>
 
       {isLoading ? (
-        <div className="flex items-center justify-center h-64">
-          <RefreshCwIcon className="w-8 h-8 text-blue-500 animate-spin" />
-        </div>
+          <TableSkeleton/>
       ) : error ? (
         <div className="text-center text-red-500">{error}</div>
       ) : (
-      //  <Table className="rounded-lg border bg-white border-gray-200">
-      //     <TableHeader className="bg-gray-300">
-      //       <TableRow className='border-b bg-gray-50'>
-      //         <TableHead className='px-4 py-3 text-left text-sm font-medium text-gray-500'>Post</TableHead>
-      //         <TableHead className=' px-4 py-3 text-left text-sm font-medium text-gray-500'>Date</TableHead>
-      //         <TableHead className="px-4 py-3 text-left text-sm font-medium text-gray-500">Impressions</TableHead>
-      //         <TableHead className="px-4 py-3 text-left text-sm font-medium text-gray-500">Engagement</TableHead>
-      //         <TableHead className="px-4 py-3 text-left text-sm font-medium text-gray-500">Reactions</TableHead>
-      //       </TableRow>
-      //     </TableHeader>
-      //     <TableBody>
-      //       {currentPosts.map((post) => (
-      //         <TableRow 
-      //           key={post.internalSearchId}
-      //           className="cursor-pointer hover:bg-gray-100"
-      //           onClick={() => setSelectedPost(post)}
-      //         >
-      //           <TableCell>
-      //             <div className="flex items-center gap-3">
-      //               <div className="relative w-16 h-16 overflow-hidden bg-gray-100 rounded-lg">
-      //                 {post.picture ? (
-      //                   <Image
-      //                     src={post.picture || "/placeholder.svg"}
-      //                     alt="Facebook post"
-      //                     fill
-      //                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-      //                     className="object-cover"
-      //                   />
-      //                 ) : (
-      //                   <div className="flex items-center justify-center w-full h-full">
-      //                     <ImageIcon className="w-6 h-6 text-gray-400" />
-      //                   </div>
-      //                 )}
-      //               </div>
-      //               <div className="max-w-[200px] truncate">
-      //                 {post.text}
-      //               </div>
-      //             </div>
-      //           </TableCell>
-      //           <TableCell>{new Date(post.created.dateTime).toLocaleString()}</TableCell>
-      //           <TableCell className="text-right">{post.impressions.toLocaleString()}</TableCell>
-      //           <TableCell className="text-right">{post.engagement.toFixed(2)}%</TableCell>
-      //           <TableCell className="text-right">{post.reactions.toLocaleString()}</TableCell>
-      //         </TableRow>
-      //       ))}
-      //     </TableBody>
-      //   </Table>
       <div className="overflow-x-auto">
       <Table className="w-full rounded-lg border bg-white border-gray-200">
         <TableHeader>
           <TableRow className="bg-gray-100 border-b border-gray-200">
             <TableHead className="px-6 py-4 text-left text-sm font-semibold text-gray-600">Post</TableHead>
             <TableHead className="px-6 py-4 text-left text-sm font-semibold text-gray-600">Date</TableHead>
-            <TableHead className="px-6 py-4 text-right text-sm font-semibold text-gray-600">
+            <TableHead className="px-6 py-4 text-center text-sm font-semibold text-gray-600">
               <div className="flex items-center justify-end">
                 <EyeIcon className="w-4 h-4 mr-2" />
                 Impressions
               </div>
             </TableHead>
-            <TableHead className="px-6 py-4 text-right text-sm font-semibold text-gray-600">
+            <TableHead className="px-6 py-4 text-center text-sm font-semibold text-gray-600">
               <div className="flex items-center justify-end">
                 <BarChart3Icon className="w-4 h-4 mr-2" />
                 Engagement
               </div>
             </TableHead>
-            <TableHead className="px-6 py-4 text-right text-sm font-semibold text-gray-600">
+            <TableHead className="px-6 py-4 text-center text-sm font-semibold text-gray-600">
               <div className="flex items-center justify-end">
                 <HeartIcon className="w-4 h-4 mr-2" />
                 Reactions
@@ -215,13 +166,13 @@ export default function FacebookPosts() {
                   minute: "2-digit",
                 })}
               </TableCell>
-              <TableCell className="px-6 py-4 text-right text-sm font-medium text-gray-700">
+              <TableCell className="px-6 py-4 text-center text-sm font-medium text-gray-700">
                 {post.impressions.toLocaleString()}
               </TableCell>
-              <TableCell className="px-6 py-4 text-right text-sm font-medium text-gray-700">
+              <TableCell className="px-6 py-4 text-center text-sm font-medium text-gray-700">
                 {post.engagement.toFixed(2)}%
               </TableCell>
-              <TableCell className="px-6 py-4 text-right text-sm font-medium text-gray-700">
+              <TableCell className="px-6 py-4 text-center text-sm font-medium text-gray-700">
                 {post.reactions.toLocaleString()}
               </TableCell>
             </TableRow>

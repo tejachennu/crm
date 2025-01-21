@@ -13,7 +13,6 @@ export default function Home() {
     try {
       user = data ? JSON.parse(data) : null;
     } catch (error) {
-      console.error("Error parsing user data from localStorage:", error);
       user = null; // Fallback if JSON is invalid
     }
 

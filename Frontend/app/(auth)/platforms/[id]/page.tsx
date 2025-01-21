@@ -63,7 +63,6 @@ export default function PlatformSelection() {
 
       router.push("/dashboard")
     } catch (error) {
-      console.error('Error updating platforms:', error)
       toast({
         title: "Error",
         description: "Failed to update platforms. Please try again.",
