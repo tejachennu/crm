@@ -10,6 +10,6 @@ router.get('/reels/user/:userId', igReelsController.getAllReelsByUser);
 
 // IGReelsDtTrk routes
 router.post('/reels/tracking', igReelsDtTrkController.createData);
-router.get('/reels/tracking/:reelId', igReelsDtTrkController.getDataByReelId);
+router.get('/reels/trackings/:reelId', igReelsDtTrkController.getDataByReelId);
 
 module.exports = router;

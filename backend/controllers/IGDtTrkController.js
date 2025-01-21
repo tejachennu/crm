@@ -1,7 +1,8 @@
-const IgDtTrk = require('../models/IGDtTrk');
-const axios = require('axios');
-const Users = require('../models/User');
-const IgPosts = require('../models/IGPosts ');
+const IgDtTrk = require("../models/IGDtTrk");
+const axios = require("axios");
+const Users = require("../models/User");
+const IgPosts = require("../models/IGPosts ");
+const { Op } = require("sequelize");
 
 // Create a new IgDtTrk entry
 exports.createData = async (req, res) => {
@@ -10,7 +11,13 @@ exports.createData = async (req, res) => {
     res.status(201).json({ success: true, data });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ success: false, message: 'Error creating data', error: error.message });
+    res
+      .status(500)
+      .json({
+        success: false,
+        message: "Error creating data",
+        error: error.message,
+      });
   }
 };
 
@@ -20,12 +27,20 @@ exports.getDataByPostId = async (req, res) => {
     const { postId } = req.params;
     const data = await IgDtTrk.findAll({ where: { postId } });
     if (!data) {
-      return res.status(404).json({ success: false, message: 'Data not found' });
+      return res
+        .status(404)
+        .json({ success: false, message: "Data not found" });
     }
     res.status(200).json({ success: true, data });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ success: false, message: 'Error fetching data', error: error.message });
+    res
+      .status(500)
+      .json({
+        success: false,
+        message: "Error fetching data",
+        error: error.message,
+      });
   }
 };
 
@@ -36,7 +51,13 @@ exports.getAllData = async (req, res) => {
     res.status(200).json({ success: true, data });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ success: false, message: 'Error fetching all data', error: error.message });
+    res
+      .status(500)
+      .json({
+        success: false,
+        message: "Error fetching all data",
+        error: error.message,
+      });
   }
 };
 
@@ -45,38 +66,44 @@ const getAccounts = async () => {
   try {
     const accounts = await Users.findAll();
     const accountDetails = accounts.map((account) => account.dataValues);
-    console.log('Fetched account details:', accountDetails);
+    console.log("Fetched account details:", accountDetails);
     return accountDetails;
   } catch (error) {
-    console.error('Error fetching account details:', error);
-    throw new Error('Failed to fetch accounts');
+    console.error("Error fetching account details:", error);
+    throw new Error("Failed to fetch accounts");
   }
 };
 
 // Fetch posts from the last 14 days
 exports.addPost14RecordIG = async () => {
   try {
-    console.log('Starting process to fetch Instagram posts of the previous 14 days...');
+    console.log(
+      "Starting process to fetch Instagram posts of the previous 14 days..."
+    );
     await processPosts();
-    console.log('Completed fetching posts.');
+    console.log("Completed fetching posts.");
   } catch (error) {
-    console.error('Error fetching posts of the previous 14 days:', error.stack || error);
+    console.error(
+      "Error fetching posts of the previous 14 days:",
+      error.stack || error
+    );
   }
 };
 
-const BASE_URL = 'https://app.metricool.com/api/v2/analytics/posts/instagram';
+const BASE_URL = "https://app.metricool.com/api/v2/analytics/posts/instagram";
 const HEADERS = {
-  Accept: 'application/json',
-  'X-Mc-Auth': "IXSWRACURPFYEMDXWSRMXWJUJJMJJWMOCEKLJBOPPZTYPYXPFOUVHROLGIIFOIYD",
+  Accept: "application/json",
+  "X-Mc-Auth":
+    "IXSWRACURPFYEMDXWSRMXWJUJJMJJWMOCEKLJBOPPZTYPYXPFOUVHROLGIIFOIYD",
 };
 
 const formatDateTime = (date) => {
   const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, '0');
-  const day = String(date.getDate()).padStart(2, '0');
-  const hours = String(date.getHours()).padStart(2, '0');
-  const minutes = String(date.getMinutes()).padStart(2, '0');
-  const seconds = String(date.getSeconds()).padStart(2, '0');
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  const hours = String(date.getHours()).padStart(2, "0");
+  const minutes = String(date.getMinutes()).padStart(2, "0");
+  const seconds = String(date.getSeconds()).padStart(2, "0");
   return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`;
 };
 
@@ -100,7 +127,9 @@ const processPosts = async () => {
       const response = await axios.get(BASE_URL, { params, headers: HEADERS });
       const posts = response.data.data || [];
 
-      console.log(`Fetched ${posts.length} posts for blogId: ${account.blogId}`);
+      console.log(
+        `Fetched ${posts.length} posts for blogId: ${account.blogId}`
+      );
 
       await Promise.all(posts.map((post) => processSinglePost(post, account)));
     } catch (error) {
@@ -112,111 +141,128 @@ const processPosts = async () => {
   });
 
   await Promise.all(fetchPromises);
-  console.log('All accounts processed.');
+  console.log("All accounts processed.");
 };
+
 
 const processSinglePost = async (post, account) => {
   try {
-    const currentDate = new Date(); // Declare and initialize `currentDate` once at the start.
+    const currentDate = new Date();
+    const formattedTrackDate = currentDate.toISOString().split("T")[0]; // Extract just the date
 
-    let existingPost = await IgDtTrk.findOne({ where: { postId: post.postId } });
-
-    if (!existingPost) {
-      // Create a new post if it doesn't exist
-      existingPost = await IgDtTrk.create({
+    const existingRecord = await IgDtTrk.findOne({
+      where: {
         postId: post.postId,
-        userId: post.userId,
-        trackDate: currentDate,
-        likes: post.likes || 0,
-        comments: post.comments || 0,
-        interactions: post.interactions || 0,
-        engagement: post.engagement || 0.0,
-        impressions: post.impressions || 0,
-        reach: post.reach || 0,
-        saved: post.saved || 0,
-        videoViews: post.videoViews || 0,
-        impressionsTotal: post.impressionsTotal || 0,
-        videoViewsTotal: post.videoViewsTotal || 0,
-      });
-      console.log(`New Instagram post created: ${post.postId}`);
-      return;
-    }
-
-    const existingTrackedData = await IgDtTrk.findAll({ 
-      where: { postId: post.postId },
-      order: [['trackDate', 'DESC']]
+        trackDate: {
+          [Op.eq]: formattedTrackDate, // Ensure we're looking for the same day
+        },
+      },
     });
 
-    if (existingTrackedData.length >= 14) {
+    if (existingRecord) {
       console.log(
-        `Instagram post with postId: ${post.postId} already has 14 records for businessId: ${account.businessId}`
+        `Record already exists for postId: ${post.postId} on date: ${formattedTrackDate}`
       );
-      return; // Exit if the post has already been tracked for 14 days
+      return; // Exit to prevent duplicate entry
     }
 
-    const postCreationDate = new Date(post.publishedAt.dateTime);
-
-    if ((currentDate - postCreationDate) / (1000 * 60 * 60 * 24) > 14) {
-      console.log(
-        `Skipping Instagram postId: ${post.postId} as it is older than 14 days.`
-      );
-      return; // Skip posts older than 14 days
-    }
-
-    const previousPostRecord = await IgDtTrk.findOne({
+    // Fetch all previous tracked data for the current post
+    const previousRecords = await IgDtTrk.findAll({
       where: { postId: post.postId },
-      order: [['trackDate', 'DESC']],
+      order: [["trackDate", "ASC"]],
     });
 
-    let todaysData = { ...post };
+    // Calculate cumulative data
+    const cumulativeData = previousRecords.reduce(
+      (sum, record) => {
+        return {
+          likes: sum.likes + (record.likes || 0),
+          comments: sum.comments + (record.comments || 0),
+          interactions: sum.interactions + (record.interactions || 0),
+          engagement: sum.engagement + (record.engagement || 0),
+          impressions: sum.impressions + (record.impressions || 0),
+          reach: sum.reach + (record.reach || 0),
+          saved: sum.saved + (record.saved || 0),
+          videoViews: sum.videoViews + (record.videoViews || 0),
+          impressionsTotal:
+            sum.impressionsTotal + (record.impressionsTotal || 0),
+          videoViewsTotal: sum.videoViewsTotal + (record.videoViewsTotal || 0),
+        };
+      },
+      {
+        likes: 0,
+        comments: 0,
+        interactions: 0,
+        engagement: 0.0,
+        impressions: 0,
+        reach: 0,
+        saved: 0,
+        videoViews: 0,
+        impressionsTotal: 0,
+        videoViewsTotal: 0,
+      }
+    );
 
-    if (previousPostRecord) {
-      const previousData = previousPostRecord.dataValues;
-      todaysData.likes -= previousData.likes || 0;
-      todaysData.comments -= previousData.comments || 0;
-      todaysData.interactions -= previousData.interactions || 0;
-      todaysData.engagement -= previousData.engagement || 0.0;
-      todaysData.impressions -= previousData.impressions || 0;
-      todaysData.reach -= previousData.reach || 0;
-      todaysData.saved -= previousData.saved || 0;
-      todaysData.videoViews -= previousData.videoViews || 0;
-      todaysData.impressionsTotal -= previousData.impressionsTotal || 0;
-      todaysData.videoViewsTotal -= previousData.videoViewsTotal || 0;
-    }
+    // Calculate today's data by subtracting cumulative data from the post's current data
+    const todaysData = {
+      likes: Math.max(0, (post.likes || 0) - cumulativeData.likes),
+      comments: Math.max(0, (post.comments || 0) - cumulativeData.comments),
+      interactions: Math.max(
+        0,
+        (post.interactions || 0) - cumulativeData.interactions
+      ),
+      engagement: Math.max(
+        0,
+        (post.engagement || 0) - cumulativeData.engagement
+      ),
+      impressions: Math.max(
+        0,
+        (post.impressions || 0) - cumulativeData.impressions
+      ),
+      reach: Math.max(0, (post.reach || 0) - cumulativeData.reach),
+      saved: Math.max(0, (post.saved || 0) - cumulativeData.saved),
+      videoViews: Math.max(
+        0,
+        (post.videoViews || 0) - cumulativeData.videoViews
+      ),
+      impressionsTotal: Math.max(
+        0,
+        (post.impressionsTotal || 0) - cumulativeData.impressionsTotal
+      ),
+      videoViewsTotal: Math.max(
+        0,
+        (post.videoViewsTotal || 0) - cumulativeData.videoViewsTotal
+      ),
+    };
 
+    // Add a record for today
     const postData = {
       postId: post.postId,
       trackDate: currentDate,
-      likes: Math.max(0, todaysData.likes || 0),
-      comments: Math.max(0, todaysData.comments || 0),
-      interactions: Math.max(0, todaysData.interactions || 0),
-      engagement: Math.max(0, todaysData.engagement || 0.0),
-      impressions: Math.max(0, todaysData.impressions || 0),
-      reach: Math.max(0, todaysData.reach || 0),
-      saved: Math.max(0, todaysData.saved || 0),
-      videoViews: Math.max(0, todaysData.videoViews || 0),
-      impressionsTotal: Math.max(0, todaysData.impressionsTotal || 0),
-      videoViewsTotal: Math.max(0, todaysData.videoViewsTotal || 0),
-      userId: post.userId || '',
-      businessId: post.businessId || '',
-      type: post.type || '',
-      filter: post.filter || '',
-      url: post.url || '',
-      content: post.content || '',
-      imageUrl: post.imageUrl || '',
+      likes: todaysData.likes,
+      comments: todaysData.comments,
+      interactions: todaysData.interactions,
+      engagement: todaysData.engagement,
+      impressions: todaysData.impressions,
+      reach: todaysData.reach,
+      saved: todaysData.saved,
+      videoViews: todaysData.videoViews,
+      impressionsTotal: todaysData.impressionsTotal,
+      videoViewsTotal: todaysData.videoViewsTotal,
+      userId: post.userId || "",
+      businessId: post.businessId || "",
+      type: post.type || "",
+      filter: post.filter || "",
+      url: post.url || "",
+      content: post.content || "",
+      imageUrl: post.imageUrl || "",
     };
 
-    // Save the calculated data
-    const result = await IgDtTrk.create(postData);
+    // Save the new record
+    await IgDtTrk.create(postData);
     console.log(
-      `Instagram post daily change added for businessId: ${account.businessId}, postId: ${
-        post.postId
-      }, result: ${result ? "Success" : "Failure"}`
+      `New record added for postId: ${post.postId}`
     );
-
-    // Update the existing post's updatedAt timestamp
-    await existingPost.update({ updatedAt: new Date() });
-
   } catch (error) {
     console.error(
       `Error processing Instagram postId: ${post.postId} for businessId: ${account.businessId}`,

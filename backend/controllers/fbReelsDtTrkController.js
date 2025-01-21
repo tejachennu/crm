@@ -15,12 +15,16 @@ exports.createData = async (req, res) => {
 
 exports.getDataByReelId = async (req, res) => {
   try {
+   
     const { reelId } = req.params;
+    console.log("data",reelId)
     const data = await FBReelsDtTrk.findAll({ 
       where: { reelId },
       order: [['trackDate', 'DESC']]
     });
-    if (!data) {
+
+    console.log(data)
+    if (!data.length <= 0) {
       return res.status(404).json({ success: false, message: 'Data not found' });
     }
     res.status(200).json({ success: true, data });

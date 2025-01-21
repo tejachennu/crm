@@ -14,8 +14,11 @@ exports.createData = async (req, res) => {
 
 exports.getDataByReelId = async (req, res) => {
   try {
+    console.log("cmg")
     const { reelId } = req.params;
+    console.log("real0",reelId)
     const data = await IGReelsDtTrk.findAll({ where: { reelId } });
+    console.log(data)
     if (!data) {
       return res.status(404).json({ success: false, message: 'Data not found' });
     }

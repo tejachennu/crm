@@ -120,7 +120,6 @@ const Updateposts = async (req, res) => {
             user: { id: user.id, platforms: user.platform }, // Return user data
         });
     } catch (processError) {
-        console.error('Error in processPosts:', processError.message);
         return res.status(500).json({ 
             message: 'Platforms updated but an error occurred during post-processing', 
             error: processError.message 
