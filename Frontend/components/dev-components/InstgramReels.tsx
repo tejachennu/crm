@@ -445,6 +445,7 @@ import { ScrollArea } from "@/components/ui/scroll-area"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { TableSkeleton } from "./TableSkeleton"
+import InstagramReelData from "./instgram/InstagramReelData"
 
 interface IGReel {
   reelId: string
@@ -581,14 +582,7 @@ function ReelDetails({ reel, onClose }: { reel: IGReel; onClose: () => void }) {
                 <ReelContent reel={reel} />
               </TabsContent>
               <TabsContent value="report">
-                <Card>
-                  <CardHeader>
-                    <CardTitle>14 Days Report</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-gray-500">No data available for the 14 days report.</p>
-                  </CardContent>
-                </Card>
+                <InstagramReelData reelId={reel.reelId} />
               </TabsContent>
             </Tabs>
           </div>

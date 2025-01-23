@@ -72,7 +72,7 @@ const InstagramPostData = ({ postId }: { postId: string }) => {
       setLoading(true);
       try {
         const response = await axios.get(
-          `http://147.93.44.40:3003/api/IGPDtTrk/${postId}`
+          `https://api.aquarythu.com/api/IGPDtTrk/${postId}`
         );
         setData(response.data.data || []);
         setError("");

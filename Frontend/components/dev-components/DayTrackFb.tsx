@@ -39,7 +39,7 @@ export default function ReelsTrackingDashboard({ reelId }: { reelId: string }) {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(`http://147.93.44.40:3003/api/fbreels/reels/tracking/${reelId}`)
+        const response = await fetch(`https://api.aquarythu.com/api/fbreels/reels/tracking/${reelId}`)
         if (!response.ok) throw new Error("Failed to fetch data")
 
         const result = await response.json()
@@ -65,23 +65,23 @@ export default function ReelsTrackingDashboard({ reelId }: { reelId: string }) {
     fetchData()
   }, [reelId])
 
-  if (!data.length) {
-    return (
-      <Card className="w-full max-w-md mx-auto">
-        <CardHeader>
-          <CardTitle className="text-xl font-semibold text-gray-700">
-            No Data Available
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <p className="text-gray-500">
-            There is no data available for this post.Old post data is not
-            available
-          </p>
-        </CardContent>
-      </Card>
-    );
-  }
+  // if (!data.length) {
+  //   return (
+  //     <Card className="w-full max-w-md mx-auto">
+  //       <CardHeader>
+  //         <CardTitle className="text-xl font-semibold text-gray-700">
+  //           No Data Available
+  //         </CardTitle>
+  //       </CardHeader>
+  //       <CardContent>
+  //         <p className="text-gray-500">
+  //           There is no data available for this post.Old post data is not
+  //           available
+  //         </p>
+  //       </CardContent>
+  //     </Card>
+  //   );
+  // }
 
   if (loading) {
     return (

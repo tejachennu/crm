@@ -12,6 +12,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { TableSkeleton } from "./TableSkeleton"
 import ReelsTrackingDashboard from "./DayTrackFb"
+import ReelData from "./facebook/ReelData"
 
 interface FBReel {
   pageId: string
@@ -157,7 +158,7 @@ function ReelDetails({ reel, onClose }: { reel: FBReel; onClose: () => void }) {
                     <CardTitle>14 Days Report</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <ReelsTrackingDashboard reelId={reel.reelId} />
+                    <ReelData reelId={reel.reelId} />
                   </CardContent>
                 </Card>
               </TabsContent>

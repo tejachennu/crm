@@ -68,22 +68,16 @@ cron.schedule('11 13 * * *', runScheduledTasks, {
   timezone: "Asia/Kolkata"
 });
 
-// processPosts();
-// getPostsOfPrevious2Days();
-// addPost14Records();
-// addPost14RecordIG();
-
-
-// sequelize
-//   .sync({ alter: true })
-//   .then(() => {
-//     console.log("Database synced successfully...");
-//   })
-//   .catch((error) => {
-//     console.error("Error syncing database:", error);
-//   })
-//   .finally(() => {
+sequelize
+  .sync({ alter: true })
+  .then(() => {
+    console.log("Database synced successfully...");
+  })
+  .catch((error) => {
+    console.error("Error syncing database:", error);
+  })
+  .finally(() => {
     app.listen(3003, () => {
       console.log("Server is running on port 3003...");
     });
-  // });
+  });
