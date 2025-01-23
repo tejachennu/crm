@@ -1,22 +1,18 @@
 const express = require("express");
 const cors = require("cors");
-const axios = require("axios");
 const sequelize = require("./config/dbConfig");
 const userRoutes = require("./routes/usersRoutes");
 const Platform = require("./routes/platformRoutes");
 const FbPost = require("./routes/fbPostsRoutes");
 const { addPost14RecordIG } = require("./controllers/IGDtTrkController");
-
 const {processPosts} = require("./controllers/IGPostsController");
 const fbPDtTrkRoutes = require("./routes/FbPDtTrkRoutes");
 const IGDtTrkRoutes = require("./routes/IGPDDtTrkRoutes");
 const cron = require('node-cron');
-
 const { getPostsOfPrevious2Days } = require("./controllers/FbPostController");
 const { addPost14Records } = require("./controllers/FbPDtTrkController");
 const { getReelsOfPrevious2Days } = require("./controllers/FBReelsController");
 const { getReelsOfPrevious2DaysIg } = require("./controllers/igReelsController");
-
 const FbReelsRoutes = require("./routes/fbReelsRoutes");
 const IgReelsRoute = require("./routes/IgReelsRoute");
 const IGPDRoutes = require("./routes/IGPDRoutes");
@@ -63,7 +59,7 @@ const runScheduledTasks = async (retries = 3) => {
   }
 };
 
-cron.schedule('11 13 * * *', runScheduledTasks, {
+cron.schedule('0 8 * * *', runScheduledTasks, {
   scheduled: true,
   timezone: "Asia/Kolkata"
 });

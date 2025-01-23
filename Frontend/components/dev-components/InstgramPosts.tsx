@@ -57,6 +57,8 @@ export default function InstagramPosts() {
         const seconds = String(date.getSeconds()).padStart(2, "0");
         return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`;
       }
+      const blogId = localStorage.getItem("blogId");
+
 
       const currentDate = new Date();
       const threeYearsAgo = new Date();
@@ -69,7 +71,7 @@ export default function InstagramPosts() {
         params: {
           from,
           to,
-          businessId
+          blogId
         },
         headers
       })

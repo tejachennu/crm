@@ -24,12 +24,12 @@ export default function FacebookPosts() {
   const [error, setError] = useState<string | null>(null)
   const [selectedPost, setSelectedPost] = useState<FacebookPost | null>(null)
   const postsPerPage = 10
-  const [blogId, setBlogId] = useState<string | null>(null);
+  // const [blogId, setBlogId] = useState<string | null>(null);
 
-  useEffect(() => {
-    const blogid = localStorage.getItem("blogId");
-    setBlogId(blogid); // blogid is a string or null
-  }, []);
+  // useEffect(() => {
+  //   const blogid = localStorage.getItem("blogId");
+  //   setBlogId(blogid);
+  // }, []);
 
   const headers = {
     Accept: "application/json",
@@ -41,6 +41,7 @@ export default function FacebookPosts() {
   }, [])
 
   const fetchPosts = async () => {
+    const blogid = localStorage.getItem("blogId");
     setIsLoading(true)
     setError(null)
     try {
@@ -65,7 +66,7 @@ export default function FacebookPosts() {
         params: {
           from,
           to,
-          blogId
+          blogId:blogid
         },
         headers
       })

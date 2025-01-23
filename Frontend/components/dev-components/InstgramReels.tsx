@@ -602,12 +602,12 @@ export default function InstagramReels() {
   const [error, setError] = useState<string | null>(null)
   const [selectedReel, setSelectedReel] = useState<IGReel | null>(null)
   const reelsPerPage = 10
-  const [blogId, setBlogId] = useState<string | null>(null)
+  // const [blogId, setBlogId] = useState<string | null>(null)
 
-  useEffect(() => {
-    const blogid = localStorage.getItem("blogId")
-    setBlogId(blogid)
-  }, [])
+  // useEffect(() => {
+  //   const blogid = localStorage.getItem("blogId")
+  //   setBlogId(blogid)
+  // }, [])
 
   const headers = {
     Accept: "application/json",
@@ -638,6 +638,8 @@ export default function InstagramReels() {
 
       const from = formatDateTime(threeYearsAgo)
       const to = formatDateTime(currentDate)
+      const blogId = localStorage.getItem("blogId");
+
 
       const response = await axios.get("https://app.metricool.com/api/v2/analytics/reels/instagram", {
         params: {

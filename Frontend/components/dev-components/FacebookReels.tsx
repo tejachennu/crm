@@ -180,12 +180,12 @@ export default function FacebookReels() {
   const [error, setError] = useState<string | null>(null)
   const [selectedReel, setSelectedReel] = useState<FBReel | null>(null)
   const reelsPerPage = 10
-  const [blogId, setBlogId] = useState<string | null>(null)
+  // const [blogId, setBlogId] = useState<string | null>(null)
 
-  useEffect(() => {
-    const blogid = localStorage.getItem("blogId")
-    setBlogId(blogid)
-  }, [])
+  // useEffect(() => {
+  //   const blogid = localStorage.getItem("blogId")
+  //   setBlogId(blogid)
+  // }, [])
 
   const headers = {
     Accept: "application/json",
@@ -197,6 +197,7 @@ export default function FacebookReels() {
   }, [])
 
   const fetchReels = async () => {
+
     setIsLoading(true)
     setError(null)
     try {
@@ -209,7 +210,7 @@ export default function FacebookReels() {
         const seconds = String(date.getSeconds()).padStart(2, "0")
         return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`
       }
-
+      const blogId = localStorage.getItem("blogId");
       const currentDate = new Date()
       const threeYearsAgo = new Date()
       threeYearsAgo.setFullYear(currentDate.getFullYear() - 3)
