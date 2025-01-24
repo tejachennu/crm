@@ -90,7 +90,7 @@ const MainSidebar: React.FC<MainSidebarProps> = ({ children }) => {
                   alt="BLS India Canada"
                 />
                 <span className="self-center text-xl font-semibold text-black sm:text-2xl whitespace-nowrap dark:text-white">
-                  CRM
+                  DataFub
                 </span>
               </a>
             </div>
