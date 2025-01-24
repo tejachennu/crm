@@ -104,7 +104,6 @@ const runScheduledTasks = async (retries = 3) => {
   }
 };
 
-runScheduledTasks()
 cron.schedule('0 8 * * *', runScheduledTasks, {
   scheduled: true,
   timezone: "Asia/Kolkata"
