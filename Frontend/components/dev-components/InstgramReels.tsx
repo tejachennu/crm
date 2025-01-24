@@ -398,7 +398,7 @@ export default function InstagramReels() {
                   <TableCell className="px-6 py-4 text-sm text-gray-600">
                     {new Date(
                       new Date(reel.publishedAt.dateTime).getTime() +
-                        5.5 * 60 * 60 * 1000 // Add IST offset
+                        4.5 * 60 * 60 * 1000 // Add IST offset
                     ).toLocaleString("en-IN", {
                       year: "numeric",
                       month: "short",
