@@ -17,6 +17,8 @@ import { InstagramPost } from '@/types/fb'
 import { InstagramPostDetailsTable } from './instgram/InstagramPostDetailsTable'
 import { InstgramPostDetails } from './instgram/InstgramPostDetails'
 import { TableSkeleton } from './TableSkeleton'
+import { SendReportMail } from './mails/sendReportMail'
+import { ExportButton } from './ExportButton'
 
 export default function InstagramPosts() {
   const [allPosts, setAllPosts] = useState<InstagramPost[]>([])
@@ -26,6 +28,8 @@ export default function InstagramPosts() {
   const [selectedPost, setSelectedPost] = useState<InstagramPost | null>(null)
   const postsPerPage = 10
   const [businessId, setBusinessId] = useState<string | null>(null);
+  const [fromDate, setFromDate] = useState<string>("");
+  const [toDate, setToDate] = useState<string>("");
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -48,24 +52,13 @@ export default function InstagramPosts() {
     setIsLoading(true)
     setError(null)
     try {
-      const formatDateTime = (date: Date) => {
-        const year = date.getFullYear();
-        const month = String(date.getMonth() + 1).padStart(2, "0");
-        const day = String(date.getDate()).padStart(2, "0");
-        const hours = String(date.getHours()).padStart(2, "0");
-        const minutes = String(date.getMinutes()).padStart(2, "0");
-        const seconds = String(date.getSeconds()).padStart(2, "0");
-        return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`;
-      }
       const blogId = localStorage.getItem("blogId");
-
-
       const currentDate = new Date();
       const threeYearsAgo = new Date();
       threeYearsAgo.setFullYear(currentDate.getFullYear() - 3);
 
-      const from = formatDateTime(threeYearsAgo);
-      const to = formatDateTime(currentDate);
+      const from = fromDate ? fromDate : formatDateTime(threeYearsAgo);
+      const to = toDate ? toDate : formatDateTime(currentDate);
 
       const response = await axios.get("https://app.metricool.com/api/v2/analytics/posts/instagram", {
         params: {
@@ -89,19 +82,69 @@ export default function InstagramPosts() {
   const currentPosts = allPosts.slice(indexOfFirstPost, indexOfLastPost)
   const totalPages = Math.ceil(allPosts.length / postsPerPage)
 
+  const formatDateTime = (date: Date) => {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    const hours = String(date.getHours()).padStart(2, "0");
+    const minutes = String(date.getMinutes()).padStart(2, "0");
+    const seconds = String(date.getSeconds()).padStart(2, "0");
+    return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`;
+  }
+
+  const changeDate = (title: string, value: string): void => {
+    const selectedDate = new Date(value);
+
+    if (isNaN(selectedDate.getTime())) {
+      console.error("Invalid date");
+      return;
+    }
+
+    const formattedDate = formatDateTime(selectedDate);
+    if (title === "From Date") {
+      setFromDate(formattedDate);
+    } else {
+      setToDate(formattedDate);
+    }
+    fetchPosts()
+  };
+
   return (
     <div className="container p-6 mx-auto">
-      <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-semibold">List of Instagram Posts</h1>
-        <Button 
-          variant="outline" 
-          className="text-white bg-blue-500" 
-          size="sm"
-          onClick={fetchPosts}
-        >
-          <RefreshCw className="w-4 h-4 mr-2" />
-          Update Posts
-        </Button>
+           <div className="flex items-center justify-between mb-6">
+        <h1 className="text-2xl font-semibold">List of Facebook Posts</h1>
+        {/* Date Filter Section */}
+        <div className="flex gap-4 mb-6">
+          <input
+            type="date"
+            title="From Date"
+            value={fromDate.slice(0, 10)} // Ensure value is in 'YYYY-MM-DD' format
+            onChange={(e) => changeDate("From Date", e.target.value)}
+            className="border border-gray-300 p-2 rounded-sm text-sm focus:ring-2 focus:ring-blue-600"
+          />
+
+          <input
+            type="date"
+            title="To Date"
+            value={toDate.slice(0, 10)} // Ensure value is in 'YYYY-MM-DD' format
+            onChange={(e) => changeDate("To Date", e.target.value)}
+            className="border border-gray-300 p-2 rounded-sm text-sm focus:ring-2 focus:ring-blue-600"
+          />
+
+          {/* Export Button */}
+          <ExportButton
+            data={allPosts}
+            type="instagram"
+            reportType="detailed"
+            className="bg-blue-600 text-white  text-xs py-2 px-4 rounded-sm hover:bg-blue-700 focus:ring-2 hover:text-white  focus:ring-blue-600"
+          />
+          <SendReportMail
+            data={allPosts}
+            type="instagram"
+            reportType="detailed"
+            className="bg-blue-600 text-white text-xs py-2 px-4 rounded-sm hover:bg-blue-700 hover:text-white focus:ring-2 focus:ring-blue-600"
+          />
+        </div>
       </div>
 
       {isLoading ? (
@@ -137,6 +180,7 @@ export default function InstagramPosts() {
                           fill
                           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                           className="object-cover"
+                          unoptimized
                         />
                       ) : (
                         <div className="flex items-center justify-center w-full h-full">

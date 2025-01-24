@@ -22,6 +22,7 @@ export function InstagramPostContent({ post }: InstagramPostContentProps) {
                 width={1024}
                 height={1024}
                 className="object-cover w-full rounded-lg"
+                unoptimized
               />
             </div>
             <div className="space-y-2">
