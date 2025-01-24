@@ -396,16 +396,16 @@ export default function InstagramReels() {
                     </div>
                   </TableCell>
                   <TableCell className="px-6 py-4 text-sm text-gray-600">
-                    {new Date(reel.publishedAt.dateTime).toLocaleString(
-                      undefined,
-                      {
-                        year: "numeric",
-                        month: "short",
-                        day: "numeric",
-                        hour: "2-digit",
-                        minute: "2-digit",
-                      }
-                    )}
+                    {new Date(
+                      new Date(reel.publishedAt.dateTime).getTime() +
+                        5.5 * 60 * 60 * 1000 // Add IST offset
+                    ).toLocaleString("en-IN", {
+                      year: "numeric",
+                      month: "short",
+                      day: "numeric",
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })}
                   </TableCell>
                   <TableCell className="px-6 py-4 text-center text-sm font-medium text-gray-700">
                     {reel.videoViews.toLocaleString()}

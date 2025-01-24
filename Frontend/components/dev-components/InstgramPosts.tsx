@@ -193,7 +193,19 @@ export default function InstagramPosts() {
                     </div>
                   </div>
                 </TableCell>
-                <TableCell>{new Date(post.publishedAt.dateTime).toLocaleString()}</TableCell>
+                <TableCell className="px-6 py-4 text-sm text-gray-600">
+                    {new Date(
+                      new Date(post.publishedAt.dateTime).getTime() +
+                        5.5 * 60 * 60 * 1000 // Add IST offset
+                    ).toLocaleString("en-IN", {
+                      year: "numeric",
+                      month: "short",
+                      day: "numeric",
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })}
+                  </TableCell>
+
                 <TableCell className="text-center">{post.impressions.toLocaleString()}</TableCell>
                 <TableCell className="text-center">{post.engagement.toFixed(2)}%</TableCell>
                 <TableCell className="text-center">{post.likes.toLocaleString()}</TableCell>

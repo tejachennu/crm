@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { useState, useEffect } from "react";
 import axios from "axios";
@@ -180,7 +180,8 @@ export default function FacebookPosts() {
             reportType="detailed"
             className="bg-blue-600 text-white hover:text-white  text-xs py-2 px-4 rounded-sm hover:bg-blue-700 focus:ring-2 focus:ring-blue-600"
           />
-          <SendReportMail  data={currentPosts}
+          <SendReportMail
+            data={currentPosts}
             type="facebook"
             reportType="detailed"
             className="bg-blue-600 text-white hover:text-white  text-xs py-2 px-4 rounded-sm hover:bg-blue-700 focus:ring-2 focus:ring-blue-600"
@@ -257,7 +258,10 @@ export default function FacebookPosts() {
                     </div>
                   </TableCell>
                   <TableCell className="px-6 py-4 text-sm text-gray-600">
-                    {new Date(post.created.dateTime).toLocaleString(undefined, {
+                    {new Date(
+                      new Date(post.created.dateTime).getTime() +
+                        5.5 * 60 * 60 * 1000 // Add IST offset
+                    ).toLocaleString("en-IN", {
                       year: "numeric",
                       month: "short",
                       day: "numeric",
@@ -265,6 +269,7 @@ export default function FacebookPosts() {
                       minute: "2-digit",
                     })}
                   </TableCell>
+
                   <TableCell className="px-6 py-4 text-center text-sm font-medium text-gray-700">
                     {post.impressions.toLocaleString()}
                   </TableCell>
