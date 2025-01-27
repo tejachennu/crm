@@ -85,7 +85,7 @@ const MainSidebar: React.FC<MainSidebarProps> = ({ children }) => {
               </button>
               <a href="#" className="flex items-center ml-2 md:mr-24">
                 <img
-                  src="https://res.cloudinary.com/daact80ci/image/upload/v1736360991/jqxypajcwrkg15shorps.avif"
+                  src="/datafub.png"
                   className="h-8 mr-3"
                   alt="BLS India Canada"
                 />
