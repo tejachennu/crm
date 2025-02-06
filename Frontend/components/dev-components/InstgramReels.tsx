@@ -299,7 +299,7 @@ export default function InstagramReels() {
   return (
     <div className="container p-6 mx-auto">
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-semibold">List of Facebook Posts</h1>
+        <h1 className="text-2xl font-semibold">List of Instgram Reels</h1>
         {/* Date Filter Section */}
         <div className="flex gap-4 mb-6">
           <input
